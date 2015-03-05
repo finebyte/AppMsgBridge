@@ -1,0 +1,109 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/UUIDLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="UUID" />
+
+    <EditText
+        android:id="@+id/UUIDEditor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/UUIDLabel"
+        android:ems="10"
+        android:onClick="doEditTextClick" >
+
+        <requestFocus />
+    </EditText>
+
+        <TextView
+        android:id="@+id/MsgLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/UUIDEditor"
+        android:text="Message" />
+    
+    
+    <EditText
+        android:id="@+id/MsgEditor"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/MsgLabel"
+        android:layout_above="@+id/StartAppBtn"
+        android:onClick="doMsgTextClick"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/StartAppBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView_wsuri"
+        android:layout_alignParentLeft="true"
+        android:onClick="sendStart"
+        android:text="Start App" />
+
+        <Button
+        android:id="@+id/SendMsgBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView_wsuri"
+        android:layout_toRightOf="@+id/StartAppBtn"
+        android:onClick="sendDataGram"
+        android:text="Send Message" />
+    
+    
+    
+    <TextView
+        android:id="@+id/textView_wsuri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText_wsuri"
+        android:layout_alignParentLeft="true"
+        android:text="Bridge wsuri e.g. ws://192.168.0.6:9000" />
+
+    <EditText
+        android:id="@+id/editText_wsuri"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/StartBridgeBtn"
+        android:layout_alignParentLeft="true"
+        android:ems="10"
+        android:text="ws://192.168.0.6:9000" />
+
+    <Button
+        android:id="@+id/StartBridgeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="22dp"
+        android:onClick="sendStartBridge"
+        android:text="Start Bridge" />
+
+        <Button
+        android:id="@+id/StopBridgeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/StartBridgeBtn"
+        android:layout_marginTop="22dp"
+        android:onClick="sendStopBridge"
+        android:text="Stop Bridge" />
+    
+
+</RelativeLayout>
