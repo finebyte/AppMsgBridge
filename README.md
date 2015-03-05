@@ -16,7 +16,7 @@ Linux / Mac
 * The Python bridge requires a newer version of autobahn (use pip install autobahn upgrade)
 * Copy appmsgbrdge.py into ~/pebble-dev/PebbleSDK-3.0-dp1/Pebble/common/phonesim
 * Bridge assumes the port numbers from the emu have not been changed, and runs on 9000 itself
-*Run:  
+* Run:  
 `python appmsgbridge.py`
 
 Android
