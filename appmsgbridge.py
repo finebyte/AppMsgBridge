@@ -1,1 +1,0 @@
-/Users/turcja/pebble-dev/PebbleSDK-3.0-dp1/Pebble/common/phonesim/appmsgbridge.py
