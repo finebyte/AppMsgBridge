@@ -20,7 +20,7 @@ Linux / Mac
 * Bridge assumes the port numbers from the emu have not been changed,
   and runs on 9000 itself
 * The bridge needs to be running in a Pebble enables python
-  environment, e.g.
+  environment, e.g.  
 `source ~/pebble-dev/PebbleSDK-3.0-dp1/.env/bin/activate`
 * Run:  
 `python appmsgbridge.py`
