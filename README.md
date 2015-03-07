@@ -4,6 +4,8 @@ AppMessage Bridge for Pebble Emulator to Android
 Instructions
 ------------
 
+All paths should be adjusted to your own SDK location and version  
+
 Start the emulator  
 `~/pebble-dev/PebbleSDK-3.0-dp1/bin/pebble install --emulator basalt`
 
@@ -15,7 +17,11 @@ Linux / Mac
 -
 * The Python bridge requires a newer version of autobahn (use pip install autobahn upgrade)
 * Copy appmsgbrdge.py into ~/pebble-dev/PebbleSDK-3.0-dp1/Pebble/common/phonesim
-* Bridge assumes the port numbers from the emu have not been changed, and runs on 9000 itself
+* Bridge assumes the port numbers from the emu have not been changed,
+  and runs on 9000 itself
+* The bridge needs to be running in a Pebble enables python
+  environment, e.g.
+`source ~/pebble-dev/PebbleSDK-3.0-dp1/.env/bin/activate`
 * Run:  
 `python appmsgbridge.py`
 
