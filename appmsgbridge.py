@@ -29,6 +29,9 @@ class MyServerProtocol(WebSocketServerProtocol):
             print("ws rx: %s" % msg)
             m=json.loads(msg)
             tid = int(m['txid'].encode("ascii","ignore"))
+            # Deal with tid = -1 which is a default in PebbleKit and breaks here
+            if (tid==-1):
+                    tid=255
             if ('acknack' in m):
                 if (m['acknack']=='ack'):
                     self.p._send_message("APPLICATION_MESSAGE", struct.pack('<BB', 0xFF, tid))  # ACK

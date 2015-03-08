@@ -25,7 +25,7 @@ Linux / Mac
 * The Python bridge requires a newer version of autobahn than comes
   with the Pebble SDK (only do this once)  
 `pip install autobahn --upgrade`
-* Run:
+* Run:  
 `cd  ~/pebble-dev/PebbleSDK-3.0-dp1/Pebble/common/phonesim`  
 `python appmsgbridge.py`
 
