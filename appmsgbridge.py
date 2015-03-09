@@ -51,8 +51,23 @@ class MyServerProtocol(WebSocketServerProtocol):
                         v=t['value'].encode("utf8","ignore")
                         tuples.append(appmessage.build_tuple(k,"CSTRING",v+'\x00'))
                     elif t['type']=='int':
-                        v = struct.pack('<i', int(t['value']))
+                        widthmap = {
+                            1: 'b',
+                            2: 'h',
+                            4: 'i'}
+                        length = t['length']
+                        v = struct.pack('<%s' % widthmap[length], int(t['value']))
+                        print("ws int "+v+" length "+widthmap[length])
                         tuples.append(appmessage.build_tuple(k,"INT",v))
+                    elif t['type']=='uint':
+                        widthmap = {
+                            1: 'B',
+                            2: 'H',
+                            4: 'I'}
+                        length = t['length']
+                        v = struct.pack('<%s' % widthmap[length], int(t['value']))
+                        print("ws int "+v+" length "+widthmap[length])
+                        tuples.append(appmessage.build_tuple(k,"UINT",v))
                     elif t['type']=='bytes':
                         b = base64.b64decode(t['value'])
                         tuples.append(appmessage.build_tuple(k,"BYTE_ARRAY",b))
@@ -109,7 +124,10 @@ class MyServerProtocol(WebSocketServerProtocol):
                         (3, 4): 'i',
                     }
                     v, = struct.unpack_from('<%s' % widths[(t, l)], encoded_dict, offset)
-                    msg_data.append({'key':k,'value':v, 'type':'integer'})
+                    if t == 2:
+                        msg_data.append({'key':k,'value':v, 'type':'uint','length':l})
+                    if t == 3:
+                        msg_data.append({'key':k,'value':v, 'type':'int','length':l})                        
                 else:
                     print 'Received bad appmessage dict.'
                 offset += l
