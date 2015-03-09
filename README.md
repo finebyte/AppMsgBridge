@@ -41,7 +41,9 @@ Known Limitations
 -
 * The Android side only sends through app messages and ack and nack
 * If your app stops communicating when it thinks the Pebble is disconnected you will have to override this.
-* Not all data types have been well tested - strings work and byte arrays are implemented but might need more work
+* Not all data types have been well tested - strings, int, unit and
+  byte arrays are all now implemented
 * Reliabilty is not 100% - there are a fair few SendFails from the Pebble...
-
+* If things stop working, you may need to restart your pebble app
+  and/or the emu
 
