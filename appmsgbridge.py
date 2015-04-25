@@ -111,7 +111,7 @@ class MyServerProtocol(WebSocketServerProtocol):
                     v, = struct.unpack_from('<%ds' % l, encoded_dict, offset)
                     try:
                         v = v[:v.index('\x00')]
-                        msg_data.append({'key':k,'value':v, 'type':'string'})
+                        msg_data.append({'key':k,'value':v, 'type':'string','length':0})
                     except ValueError:
                         pass
                 elif t in (2, 3):  # UINT, INT
