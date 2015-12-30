@@ -9,6 +9,7 @@ Instructions
 `>pebble install --emulator basalt -v`
 
 * Review the output:
+
 `
 INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 209.118.208.39
 INFO:pebble_tool.sdk.emulator:Spawning QEMU.
@@ -23,6 +24,7 @@ Installing app...
 App install succeeded.
 `
 * Note the port number from the pypkjs --port argument
+
 `52377`
 
 Android
@@ -34,12 +36,17 @@ Android
 Linux / Mac
 -
 * Find your local Pebble PYTHON_PATH and set it
+
 `>cat ``which pebble`` 
+
 #!/bin/bash
 PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages" PHONESIM_PATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/bin/pypkjs" PEBBLE_TOOLCHAIN_PATH="/usr/local/Cellar/pebble-toolchain/2.0/arm-cs-tools/bin" PEBBLE_IS_HOMEBREW="1" exec "/usr/local/Cellar/pebble-sdk/4.0/libexec/bin/pebble" "$@"
+
 >export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages"
 `
+
 * Run the Bridge with the uri to your Android device and the emulator on localhost  
+
 `python appmsgbridge.py ws://192.168.0.6:9011 ws://localhost:52377`
 
 
