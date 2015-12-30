@@ -8,11 +8,9 @@ Instructions
 
 * Start the emulator with -v
 
-```pebble install --emulator basalt -v
-```
+`pebble install --emulator basalt -v`
 
 * Review the output:
-
 
 INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 209.118.208.39
 INFO:pebble_tool.sdk.emulator:Spawning QEMU.
@@ -40,9 +38,11 @@ Linux / Mac
 -
 * Find your local Pebble PYTHON_PATH and set it
 
-```
-cat `which pebble` 
-```
+`which pebble`
+
+/usr/local/bin/pebble
+
+`cat /usr/local/bin/pebble`
 
 PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages" PHONESIM_PATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/bin/pypkjs" PEBBLE_TOOLCHAIN_PATH="/usr/local/Cellar/pebble-toolchain/2.0/arm-cs-tools/bin" PEBBLE_IS_HOMEBREW="1" exec "/usr/local/Cellar/pebble-sdk/4.0/libexec/bin/pebble" "$@"
 
