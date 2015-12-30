@@ -24,9 +24,7 @@ INFO:pebble_tool.sdk.emulator:pypkjs command: /usr/bin/python /usr/local/Cellar/
 Installing app...
 App install succeeded.
 
-* Note the port number from the pypkjs --port argument
-
-`52377`
+* Note the port number from the pypkjs --port argument : 52377
 
 Android
 -
