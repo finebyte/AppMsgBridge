@@ -6,6 +6,8 @@ Updated: 30 December 2015
 Instructions
 ------------
 
+AppMsgBridge and these instructions assume you are using libpebble2 (all recent SDKs) and Pebble Tool 4 (see https://developer.getpebble.com/blog/2015/12/01/A-New-Pebble-Tool/)
+
 * Start the emulator with -v
 
 `pebble install --emulator basalt -v`
