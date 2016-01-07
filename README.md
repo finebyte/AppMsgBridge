@@ -36,7 +36,7 @@ Android
 
 Linux / Mac
 -
-* Find your local Pebble PYTHON_PATH and set it
+* Find your local Pebble PYTHON_PATH and set it. Recent brew installs can do as follows:
 
 `which pebble`
 
@@ -49,6 +49,10 @@ PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-p
 ```
 export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages"
 ```
+
+* Older SDK installs will need to find where the SDK and libpebble2 was installed under that.
+
+`export PYTHONPATH=PATH_TO_YOUR_PEBBLE_SDK/.env/lib/python2.7/site-packages`
 
 * Run the Bridge with the uri to your Android device and the emulator on localhost  
 
