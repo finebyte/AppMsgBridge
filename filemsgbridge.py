@@ -83,29 +83,30 @@ def is_process_running(process_id):
 # main
 
 if len(sys.argv)!=2:
-    print("FileMsgBridge\n arg1 = Emulator type (aplite | basalt | chalk)")
+    print("FileMsgBridge\n arg1 = ws endpoint (ws://host:port) or Emulator type (aplite | basalt | chalk)")
     print("e.g. python filemsgbridge.py aplite\n")
     exit()
 
+if ("ws" in sys.argv[1]):
+    emu_url=sys.argv[1];
+else:
+    try:
+        e = json.load(open(tempfile.gettempdir()+"/pb-emulator.json"))
+        basalt = e[sys.argv[1]]
+    except IOError:
+        print("FileMsgBridge: Emu file not found (not running)")
+        exit()
+    except KeyError:
+        print("FileMsgBridge: Emu data not found (not running) : " + sys.argv[1])
+        exit()
 
-try:
-    e = json.load(open(tempfile.gettempdir()+"/pb-emulator.json"))
-    basalt = e[sys.argv[1]]
-except IOError:
-    print("FileMsgBridge: Emu file not found (not running)")
-    exit()
-except KeyError:
-    print("FileMsgBridge: Emu data not found (not running) : " + sys.argv[1])
-    exit()
-
-emuvsn=basalt.keys()[0]
-pid=basalt[emuvsn]['pypkjs']['pid']
-port=basalt[emuvsn]['pypkjs']['port']
-if (not is_process_running(pid)):
-    print("FileMsgBridge: Emu process not found (not running) : " + sys.argv[1])
-    exit()
-
-emu_url = "ws://localhost:"+str(port)
+    emuvsn=basalt.keys()[0]
+    pid=basalt[emuvsn]['pypkjs']['pid']
+    port=basalt[emuvsn]['pypkjs']['port']
+    if (not is_process_running(pid)):
+        print("FileMsgBridge: Emu process not found (not running) : " + sys.argv[1])
+        exit()
+    emu_url = "ws://localhost:"+str(port)
 
 
 logging.basicConfig()
@@ -129,7 +130,7 @@ while 1:
         if msg and msg.strip():
             processmsg(msg)
             # sleep so as not to flood the message queue when piping from a file
-            time.sleep(0.1)
+            time.sleep(0.5)
         else:
             exit()
     except ValueError:
