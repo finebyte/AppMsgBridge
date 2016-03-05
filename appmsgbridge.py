@@ -10,6 +10,10 @@ import logging
 import json
 import struct
 import base64
+import time
+import tempfile
+import os
+
 
 # Subclass of the standard Pebble AppMessageService
 # to access the meta data on Integer types
@@ -130,16 +134,48 @@ def ws_on_close(ws):
 def ws_on_open(ws):
     print("### AppMsgBridge Connection open ###")
 
+def is_process_running(process_id):
+    try:
+        os.kill(process_id, 0)
+        return True
+    except OSError:
+        return False
+
+
 # main
-print("AppMsg Bridge\n arg1 = Android ws://PhoneIP:Port (default 9011)\n arg2 = ws://PebbleEmuIP:Port (see output from pebble install --emulator basalt -v)");
-print("e.g. python bridge.py ws://192.168.1.102:9011 ws://localhost:52377")
 if len(sys.argv)!=3:
+    print("AppMsg Bridge\n arg1 = Android ws://PhoneIP:Port (default 9011)\n")
+    print("arg2= ws endpoint (ws://host:port) or Emulator type (aplite | basalt | chalk)")
+    print("e.g. python bridge.py ws://192.168.1.102:9011 basalt")
+    print("e.g. python bridge.py ws://192.168.1.102:9011 ws://localhost:52377")
     exit()
+
+if ("ws" in sys.argv[2]):
+    emu_url=sys.argv[2];
+else:
+    try:
+        e = json.load(open(tempfile.gettempdir()+"/pb-emulator.json"))
+        basalt = e[sys.argv[2]]
+    except IOError:
+        print("AppMsgBridge: Emu file not found (not running)")
+        exit()
+    except KeyError:
+        print("AppMsgBridge: Emu data not found (not running) : " + sys.argv[1])
+        exit()
+    
+    emuvsn=basalt.keys()[0]
+    pid=basalt[emuvsn]['pypkjs']['pid']
+    port=basalt[emuvsn]['pypkjs']['port']
+    if (not is_process_running(pid)):
+        print("AppMsgBridge: Emu process not found (not running) : " + sys.argv[1])
+        exit()
+    emu_url = "ws://localhost:"+str(port)
 
 logging.basicConfig()
 
 # connect to the pebble and register for AppMessage events
-pebble = PebbleConnection(WebsocketTransport(sys.argv[2]))
+print("### Connecting to " + sys.argv[2] + " on " + emu_url + " ###")
+pebble = PebbleConnection(WebsocketTransport(emu_url))
 pebble.connect()
 print("### Pebble Connection open ###")
 appmessage = BridgeAppMessageService(pebble)
