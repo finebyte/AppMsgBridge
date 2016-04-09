@@ -16,25 +16,30 @@ AppMsgBridge and these instructions assume you are using libpebble2 (all recent 
 Linux / Mac
 -
 * Find your local Pebble PYTHON_PATH and set it. Recent brew installs can do as follows:
-
-`which pebble`
+```
+$ which pebble
 
 /usr/local/bin/pebble
 
-`cat /usr/local/bin/pebble`
+$ cat /usr/local/bin/pebble
 
 PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages" PHONESIM_PATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/bin/pypkjs" PEBBLE_TOOLCHAIN_PATH="/usr/local/Cellar/pebble-toolchain/2.0/arm-cs-tools/bin" PEBBLE_IS_HOMEBREW="1" exec "/usr/local/Cellar/pebble-sdk/4.0/libexec/bin/pebble" "$@"
 
-```
-export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages"
+
+$ export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7/site-packages:/usr/local/Cellar/pebble-sdk/4.0/libexec/lib/python2.7/site-packages"
+
 ```
 
 * Older SDK installs will need to find where the SDK and libpebble2 was installed under that.
+```
+$ export PYTHONPATH=PATH_TO_YOUR_PEBBLE_SDK/.env/lib/python2.7/site-packages
+```
 
-`export PYTHONPATH=PATH_TO_YOUR_PEBBLE_SDK/.env/lib/python2.7/site-packages`
 
 * Run the Bridge with the relevant option and the emulator type (or a ws endpoint for advanced use)  
 ```
+$ python appmsgbridge.py -h
+
 usage: appmsgbridge.py [-h] -i source -o dest
 optional arguments:
   -h, --help  show this help message and exit
