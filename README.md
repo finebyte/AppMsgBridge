@@ -33,13 +33,6 @@ export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7
 
 `export PYTHONPATH=PATH_TO_YOUR_PEBBLE_SDK/.env/lib/python2.7/site-packages`
 
-For Android Bridge
--
-* Build and Install the APK
-* THIS IS IMPORTANT : Ensure your real Pebble and Phone are not connected (e.g turn of BT on your Pebble)
-* Start the Android side of the bridge and note the ws uri e.g. ws://192.168.0.6:9011
-
-
 * Run the Bridge with the relevant option and the emulator type (or a ws endpoint for advanced use)  
 ```
 usage: appmsgbridge.py [-h] -i source -o dest
@@ -55,6 +48,13 @@ optional arguments:
               aplite | basalt | chalk = Find the relevant Pebble emu
               ws://localhost:52377 = Connect to ws endpoint
 ```
+
+For Android Bridge
+-
+* Build and Install the APK
+* THIS IS IMPORTANT : Ensure your real Pebble and Phone are not connected (e.g turn of BT on your Pebble)
+* Start the Android side of the bridge and note the ws uri e.g. ws://192.168.0.6:9011
+
 Known Limitations
 -
 * The Android side only sends through app messages and ack and nack
