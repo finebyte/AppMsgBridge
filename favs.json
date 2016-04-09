@@ -1,0 +1,1 @@
+{"items":[{"title":"Send a b c","msg":{"uuid":"XXX","txid":"1","msg_data":[{"key":"0","value":"a","width":0,"type":"string"},{"key":"1","value":"b","width":0,"type":"string"},{"key":"2","value":"c","width":0,"type":"string"},{"key":"3","value":"5","width":1,"type":"int"},{"key":"4","value":"1000","width":2,"type":"int"}]}}]}

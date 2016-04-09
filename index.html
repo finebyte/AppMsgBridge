@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript">
+            var socket = null;
+            var isopen = false;
+            
+            
+            favlist={items:[
+                            ]
+            };
+        
+        
+        emptymsg='{"uuid":"","txid":"","msg_data":[{"key":0,"type":"string","length":0,"value":""}]}';
+        
+        type_widths={"string":0,"int8":1,"int16":2,"int32":4,"uint8":1,"uint16":2,"uint32":4};
+        type_rev={"string0":"string","int1":"int8","int2":"int16","int4":"int32","uint1":"uint8","uint2":"uint16","uint4":"uint32"};
+        type_types={"string":"string","int8":"int","int16":"int","int32":"int","uint8":"uint","uint16":"uint","uint32":"uint"};
+        
+        
+        window.onload = function() {
+            connect();
+            viewMsg("msgviewdiv",emptymsg);
+            loadfavs();
+        }
+        
+        function addFav(favs,f) {
+            tr=document.createElement("tr")
+            p=document.createElement("td");
+            a=document.createElement("a");
+            a.innerHTML=f.title;
+            a.href="#";
+            a.msg=JSON.stringify(f.msg);
+            a.addEventListener('click', function (event) {
+                                    viewMsg('msgviewdiv',event.srcElement.msg);
+                               });
+            b=document.createElement("button");
+            b.innerHTML="X";
+            b.item=f;
+            b.addEventListener('click', function (event) {
+                                idx = favlist.items.indexOf(event.srcElement.item)
+                                if (idx!=-1) {
+                                    favlist.items.splice(idx,1);
+                                    favs=document.getElementById("favs");
+                                    while (favs.firstChild) {
+                                        favs.removeChild(favs.firstChild);
+                                    }
+                                    for (i=0;i<favlist.items.length;i++) {
+                                        addFav(favs,favlist.items[i]);
+                                    }
+                                    saveList();
+                                }
+                            });
+                            
+            tr.appendChild(p);
+            p.appendChild(a);
+            x=document.createElement("td")
+            x.appendChild(b);
+            tr.appendChild(x);
+            favs.appendChild(tr);
+
+        }
+        
+        function loadfavs() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    favlist=JSON.parse(xhttp.responseText);
+                    // Load favlist
+                    favs=document.getElementById("favs");
+                    for (i=0;i<favlist.items.length;i++) {
+                        addFav(favs,favlist.items[i]);
+                    }
+                    sf=document.getElementById("statusf");
+                    sf.innerHTML="Loaded at " + getTime();
+
+                }
+            };
+            xhttp.open("GET", "favs.json", true);
+            xhttp.send();
+        };
+        
+        function connect() {
+            socket = new WebSocket("ws://127.0.0.1:9000");
+            socket.binaryType = "arraybuffer";
+            
+            socket.onopen = function() {
+                console.log("Connected!");
+                cs=document.getElementById("statusc");
+                cs.innerHTML="Connected";
+                isopen = true;
+            }
+            
+            socket.onmessage = function(e) {
+                if (typeof e.data == "string") {
+                    console.log("Text message received: " + e.data);
+                    addDiv("right",e.data);
+                } else {
+                    console.log("Binary message received, skipping");
+                }
+            }
+            
+            socket.onclose = function(e) {
+                cs=document.getElementById("statusc");
+                cs.innerHTML="Disconnected";
+                console.log("Connection closed.");
+                socket = null;
+                isopen = false;
+            }
+        }
+        
+        function createInputWithLabel(name, val, sz, toclone) {
+            p=document.createElement("div");
+            sp=document.createElement("span");
+            sp.className="celltitle";
+            sp.innerHTML=name;
+            p.appendChild(sp)
+            inp=document.createElement("input");
+            inp.id=name;
+            if (val!=null) {
+                inp.value=val;
+            }
+            if (sz!=null) {
+                inp.size=sz;
+            }
+            p.appendChild(inp);
+            if (toclone!=null) {
+                typedd=document.getElementById(toclone);
+                p.appendChild(typedd.cloneNode(true));
+                
+            }
+            return p;
+        }
+        
+        function createDataItem(f,o) {
+            
+            outer=document.createElement("div");
+            inp=document.createElement("input");
+            inp.id='key';
+            inp.value=o['key'];
+            inp.size=3;
+            outer.appendChild(inp);
+            typedd=document.getElementById('TypeDD');
+            t2=typedd.cloneNode(true);
+            t2.id='type';
+            if (o['width']) {
+                t2.value=type_rev[o['type']+o['width']];
+            } else {
+                t2.value=o['type'];
+            }
+            
+            outer.appendChild(t2);
+            inp2=document.createElement("input");
+            inp2.id='val';
+            inp2.value=o['value'];
+            inp2.size="50"
+            outer.appendChild(inp2);
+            b=document.createElement("button");
+            b.innerHTML="X";
+            b.container=f;
+            b.item=outer;
+            b.addEventListener('click', function (event) {
+                               event.srcElement.container.removeChild(event.srcElement.item);
+                               });
+            outer.appendChild(b);
+            f.appendChild(outer);
+            return outer;
+        }
+        
+        
+        function viewMsg(divname,msg) {
+            var outer = document.getElementById(divname);
+            newdiv = document.createElement("div")
+            jo = JSON.parse(msg);
+            form=document.createElement("form");
+            form.id="msgform";
+            newdiv.appendChild(form);
+            form.appendChild(createInputWithLabel("uuid",jo.uuid));
+            form.appendChild(createInputWithLabel("txid", jo.txid));
+            form.fieldcount=jo.msg_data.length
+            for (i=0;i<jo.msg_data.length;i++) {
+                o=jo.msg_data[i];
+                createDataItem(form,o);
+            }
+            while (outer.firstChild) { outer.removeChild(outer.firstChild) };
+            outer.appendChild(newdiv);
+        }
+        
+        function addField() {
+            var outer = document.getElementById("msgform");
+            emptyitem =
+            {
+                key:"",
+                value:"",
+                type:"string"
+            }
+            createDataItem(form,emptyitem);
+            
+        }
+        
+        
+        function formatMsg(m) {
+            if (m.acknack) {
+                out= m.txid + " [" + m.acknack + "]\n";
+            } else {
+                out= m.txid + " [" + m.uuid + "]\n";
+            }
+            if (m.msg_data) {
+                for (i=0;i<m.msg_data.length;i++) {
+                    out+=m.msg_data[i].key + "::" + m.msg_data[i].value + "\n"
+                }
+            }
+            return out;
+        }
+        
+        function addDiv(divname, msg) {
+            var outer = document.getElementById(divname);
+            newdiv = document.createElement("div")
+            jo = JSON.parse(msg);
+            newdiv.msg=msg;
+            newdiv.className ="preformatted";
+            newdiv.innerHTML+=formatMsg(jo);
+            //JSON.stringify(jo,null,2);
+            newdiv.addEventListener('click', function (event) {
+                                    viewMsg('msgviewdiv',event.srcElement.msg);
+                                    });
+                                    outer.appendChild(newdiv);
+                                    outer.scrollTop=outer.scrollHeight;
+                                    return newdiv;
+                                    
+        }
+        
+        
+        function getMsgFromForm() {
+            mm = {uuid:document.getElementById("uuid").value,
+                txid:document.getElementById("txid").value,
+                msg_data:[]};
+            fieldcount = document.getElementById("msgform").fieldcount
+            
+            msgform = document.getElementById("msgform");
+            console.log("msgform=" + msgform.id);
+            item = msgform.firstChild; //uuid
+            item=item.nextSibling; // txid
+            item=item.nextSibling; // item1
+            
+            while (item) {
+                type_sel=item.querySelector("#type");
+                oio = {
+                    key:item.querySelector("#key").value,
+                    value:item.querySelector("#val").value,
+                    width:type_widths[type_sel.value],
+                    type:type_types[type_sel.value]
+                }
+                mm.msg_data.push(oio);
+                
+                item=item.nextSibling;
+            }
+            return JSON.stringify(mm);
+        }
+        
+        function saveList() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    console.log("Saved...");
+                    sf=document.getElementById("statusf");
+                    sf.innerHTML="Saved at " + getTime();
+
+                }
+            };
+            xhttp.open("POST", "favs.json", true);
+            xhttp.send(JSON.stringify(favlist));
+        }
+        
+        function getTime() {
+            d = new Date();
+            return d.getHours()+":"+d.getMinutes();
+        }
+        
+        function saveMsg() {
+            msg=getMsgFromForm();
+            var title = prompt("Enter a title", "msg-"+new Date().toJSON());
+            if (title!=null) {
+                favs=document.getElementById("favs");
+                f={"title":title,
+                    "msg":JSON.parse(msg)};
+                addFav(favs,f);
+                favlist.items.push(f);
+                saveList();
+            }
+            
+        }
+        
+        
+        function sendText(outmsg) {
+            console.log("sendText:"+outmsg);
+            if (isopen) {
+                socket.send(outmsg);
+                addDiv("middle",outmsg);
+                console.log("Message sent");
+            } else {
+                console.log("Connection not opened.")
+            }
+        };
+        
+        
+        
+            </script>
+        <style>
+            * {
+                font-family: Arial;
+            }
+            #content, html, body {
+                height: 98%;
+            }
+        #left {
+            float: left;
+            width: 33%;
+            background: white;
+            height: 100%;
+            overflow: scroll;
+        }
+        #middle {
+            display: inline-block;
+            width: 34%;
+            background: green;
+            height: 100%;
+            overflow: scroll;
+        }
+        #right {
+            float: right;
+            width: 33%;
+            background: red;
+            height: 100%;
+            overflow: scroll;
+        }
+        .preformatted {
+            font-family: monospace;
+            white-space: pre;
+        }
+        .preformatted:nth-child(even) {
+            background: lightgray;
+        }
+        .celltitle {
+            display: inline-block;
+            width: 50px;
+            height: 10px;
+            margin: 0px;
+            border: 0px solid #73AD21;
+        }
+        .quarter {
+            display: inline-block;
+            width: 25%;
+            height: 10px;
+            margin: 0px;
+            border: 0px solid #73AD21;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="left">
+            Status:<span id="statusc">Waiting...</span> / <span id="statusf"></span>
+            <p/>
+            <button onclick='connect();'>Connect</button>
+            <hr>
+<!--            <p/>msg_data: <input type="text" id="msg"></input>-->
+<!--            <p/><button onclick='sendText(document.getElementById("msg"));'>Send Message from Field</button>-->
+            <div id="msgviewdiv"></div>
+            <div style="text-align: center;">
+            <button style='width: 90%; align: centre' onclick='sendText(getMsgFromForm());'>Send Message</button>
+            <button onclick='viewMsg("msgviewdiv",emptymsg);'>New Message</button>
+            <button onclick='addField();'>Add Field</button>
+            <button onclick='saveMsg(getMsgFromForm());'>Save Message</button>
+            </div>
+            <p>Favourites</p>
+            <table id="favs">
+            </table>
+        </div>
+        <div id="middle">
+            Sent
+        </div>
+        <div id="right">
+            Received
+        </div>
+        <div style="visibility: hidden">
+            <select id="TypeDD">
+                <option value="string">string</option>
+                <option value="int8">int8</option>
+                <option value="int16">int16</option>
+                <option value="int32">int32</option>
+                <option value="uint8">uint8</option>
+                <option value="uint16">uint16</option>
+                <option value="uint32">uint32</option>
+            </select>
+        </div>
+    </body>
+</html>
+
