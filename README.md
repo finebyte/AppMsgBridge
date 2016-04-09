@@ -60,6 +60,34 @@ For Android Bridge
 * THIS IS IMPORTANT : Ensure your real Pebble and Phone are not connected (e.g turn of BT on your Pebble)
 * Start the Android side of the bridge and note the ws uri e.g. ws://192.168.0.6:9011
 
+Web Interface
+-
+* Start the emulator first
+* Start the bridge with -i server
+* Web Server starts on http://localhost:8080
+* Screen is split into three parts, Message Editor, Messages Sent, Messages Received
+* Message Editor:
+  * Create a Message with your UUID, a transaction id and the fields you want (with the Keys as numbers)
+  * You can send the message or save it for later
+  * Your saved messages load on startup and are stored in favs.json in the folder you launched the bridge from
+  * If sending a message fails, the web interface might disconnect. You can reconnect it with the button
+* Sent and Received Messages
+  * Each row shows a message sent of received in a compact form
+  * Click on the message to load into the editor
+
+File Interface
+-
+* Start the emulator first
+* Start the bridge with -i filename
+* The file should contain the json messages one per line
+```
+{"uuid":"XXX","txid":3,"msg_data":[
+{"key":"1", "type":"string", "width":0, "value":"I am a string"},
+{"key":"2", "type":"int", "width":1, "value":"1"},
+{"key":"3", "type":"int", "width":4, "value":"1"}
+]}
+```
+
 Known Limitations
 -
 * The Android side only sends through app messages and ack and nack
