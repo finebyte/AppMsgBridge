@@ -1,7 +1,8 @@
 # AppMsgBridge
-AppMessage Bridge for Pebble Emulator to Android
+AppMessage Tools for Pebble Emulator
+Send AppMessages from Android , File, or Simple Web Interface to Emu
 
-Updated: 5 March 2015
+Updated: 9 April 2016
 
 Instructions
 ------------
@@ -11,12 +12,6 @@ AppMsgBridge and these instructions assume you are using libpebble2 (all recent 
 * Start the emulator
 
 `pebble install --emulator basalt`
-
-Android
--
-* Build and Install the APK
-* THIS IS IMPORTANT : Ensure your real Pebble and Phone are not connected (e.g turn of BT on your Pebble)
-* Start the Android side of the bridge and note the ws uri e.g. ws://192.168.0.6:9011
 
 Linux / Mac
 -
@@ -38,11 +33,28 @@ export PYTHONPATH="/usr/local/Cellar/pebble-sdk/4.0/libexec/vendor/lib/python2.7
 
 `export PYTHONPATH=PATH_TO_YOUR_PEBBLE_SDK/.env/lib/python2.7/site-packages`
 
-* Run the Bridge with the uri to your Android device and the emulator type (or a ws endpoint for advanced use)  
+For Android Bridge
+-
+* Build and Install the APK
+* THIS IS IMPORTANT : Ensure your real Pebble and Phone are not connected (e.g turn of BT on your Pebble)
+* Start the Android side of the bridge and note the ws uri e.g. ws://192.168.0.6:9011
 
-`python appmsgbridge.py ws://192.168.0.6:9011 basalt`
 
-
+* Run the Bridge with the relevant option and the emulator type (or a ws endpoint for advanced use)  
+```
+usage: appmsgbridge.py [-h] -i source -o dest
+optional arguments:
+  -h, --help  show this help message and exit
+  -i source   Source of Input data 
+              server = Start WSS server (for web page)
+              ws://192.168.1.102:9011 = Connect to ws endpoint
+               (e.g. the Bridge Android app)
+              filename = Read from a file with JSON messages one per line
+              - = Read from stdin with JSON messages one per line
+  -o dest     Destination address of pebble / emu
+              aplite | basalt | chalk = Find the relevant Pebble emu
+              ws://localhost:52377 = Connect to ws endpoint
+```
 Known Limitations
 -
 * The Android side only sends through app messages and ack and nack
