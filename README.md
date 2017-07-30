@@ -94,3 +94,4 @@ Known Limitations
 * If your app stops communicating when it thinks the Pebble is disconnected you will have to override this.
 * Reliabilty is not 100% - there are a fair few SendFails from the Pebble...
 * If things stop working, you may need to restart your pebble app and/or the emu
+
